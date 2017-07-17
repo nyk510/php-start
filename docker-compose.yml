@@ -1,0 +1,31 @@
+version: '2'
+services:
+    web:
+        # コンテナ作成のワークスペースの場所. 要するにDockerfileの場所
+        build: ./docker/web
+        # ホスト側とコンテナとのポートの関係
+        ports:
+            - "8000:80"
+            - "3000:3000"
+        # コンテナ間での通信の定義
+        links:
+            - db
+        # ホスト-コンテナ の間で共有するディレクトリ
+        volumes:
+          - ./html:/var/www/html
+        container_name: php-tutorial-web
+    db:
+        # ベースとなるイメージの指定
+        # image or build を指定するってこと
+        image: "mysql:5.7"
+        # 環境変数の定義
+        environment:
+            MYSQL_ROOT_PASSWORD: hoge
+            MYSQL_DATABASE: php-tutorial
+            MYSQL_USER: php-tutorial
+            MYSQL_PASSWORD: hoge
+            MYSQL_HOST: ""
+        mem_limit: 10000000000
+        ports:
+            - "33333:3306"
+        container_name: php-tutorial-database
